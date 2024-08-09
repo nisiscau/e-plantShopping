@@ -1,11 +1,12 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeItem, updateQuantity } from './CartSlice';
+import { addItem, removeItem, updateQuantity } from './CreatSlice';
 import './CartItem.css';
 
-const CartItem = ({ onContinueShopping }) => {
+const Cart = ({ onContinueShopping }) => {
   const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
+
 
   const getCost = (cost) => {
     return parseFloat(cost.replace('$', ''));
@@ -13,31 +14,35 @@ const CartItem = ({ onContinueShopping }) => {
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
-     let totalAmount = 0;
-     cart.forEach((item)=> {
-         totalAmount += item.quantity * getCost(item.cost);
+    let totalAmount = 0;
+    cart.forEach((item)=> {
+        totalAmount += item.quantity*getCost(item.cost);
     });
     return totalAmount;
   };
+
+  
 
   const handleContinueShopping = (e) => {
     onContinueShopping();
   };
 
   const handleCheckoutShopping = (e) => {
-    alert('Functionality to be added for future reference');
+  alert('Coming Soon');
   };
 
+
   const handleIncrement = (item) => {
-    let newItemQuantity = item.quantity + 1;
+    let newItemQuantity = item.quantity +1;
     dispatch(updateQuantity({ name: item.name, quantity: newItemQuantity }));
+    
   };
 
   const handleDecrement = (item) => {
-    let newItemQuantity = item.quantity - 1;
-    if(newItemQuantity > 0){
+    if(item.quantity>1){
+      let newItemQuantity = item.quantity -1;
       dispatch(updateQuantity({ name: item.name, quantity: newItemQuantity }));
-    } else {
+    }else{
         dispatch(removeItem(item));
     }
   };
@@ -49,8 +54,13 @@ const CartItem = ({ onContinueShopping }) => {
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
     let totalCost = 0;
-    totalCost = item.quantity * getCost(item.cost);
+        totalCost = item.quantity*getCost(item.cost);;
     return totalCost;
+  };
+
+  const scrollToTop = (event) => {
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -84,6 +94,5 @@ const CartItem = ({ onContinueShopping }) => {
   );
 };
 
-export default CartItem;
-
+export default Cart;
 
